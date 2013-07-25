@@ -2092,7 +2092,7 @@ void stadt_t::rdwr(loadsave_t* file)
 		townhall_road = koord::invalid;
 	}
 
-	if(file->get_version() >= 110005 && file->get_experimental_version() < 12) 
+	if(file->get_version() >= 110005 && file->get_experimental_version() <= 12) 
 	{
 		// Old "factory_entry_t" code - deprecated, but must skip to the correct 
 		// position in old saved game files. NOTE: There is *no* way to save in 

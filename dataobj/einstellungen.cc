@@ -1107,7 +1107,7 @@ void settings_t::rdwr(loadsave_t *file)
 			}
 
 			file->rdwr_byte(passenger_routing_packet_size);
-			if(file->get_experimental_version() >= 12)
+			if(file->get_experimental_version() >= 12 && file->is_saving() )
 			{
 				file->rdwr_short(max_alternative_destinations);
 			}

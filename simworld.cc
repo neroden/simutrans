@@ -6132,7 +6132,7 @@ DBG_MESSAGE("karte_t::speichern(loadsave_t *file)", "saved messages");
 		}
 	}
 
-	if(file->get_experimental_version() >= 12)
+	if(file->get_experimental_version() >= 12 && file->is_saving() )
 	{
 		file->rdwr_long(next_step);
 		file->rdwr_long(step_count[0]);

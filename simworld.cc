@@ -4465,6 +4465,9 @@ void karte_t::step_passengers_and_mail(long delta_t)
 		const uint16 min_visiting_tolerance = settings.get_min_local_tolerance();
 		const uint16 range_visiting_tolerance = max(0, settings.get_max_midrange_tolerance() - min_visiting_tolerance);
 
+		const uint16 min_overnight_tolerance = settings.get_min_longdistance_tolerance();
+		const uint16 range_overnight_tolerance = max(0, settings.get_max_longdistance_tolerance() - min_visiting_tolerance);
+
 		// TODO: Set this in simuconf.tab
 		const uint16 max_onward_trips = 3;
 
@@ -4504,25 +4507,37 @@ void karte_t::step_passengers_and_mail(long delta_t)
 				route_status = no_route;
 
 				// Split passengers between commuting trips and other trips.
-				// TODO: Have the proportion of commuting trips (currently fixed at 2/3rds) customisable in simuconf.tab.
+				// TODO: Have the proportion of commuting trips (currently fixed) customisable in simuconf.tab.
+				// Current numbers are based on:
+				// Commute 5 / week = 260
+				// Visit (/shop) 3 / week = 156
+				// Overnight 2 / year = 2
 				if(trip_count == 0)
 				{
 					// First trip - set the trip type.
-					trip =
-					(wtyp == warenbauer_t::passagiere) ?
-						simrand(300, "karte_t::step_passengers_and_mail() (commuting or visiting trip?)") <= 200 ?
-						commuting_trip : visiting_trip :
-					  mail_trip;
-
-					  // Set here because we deduct the previous journey time from the tolerance for onward trips.
-
-					  tolerance = 
-						trip == mail_trip ? 
-						65535 : 
-							trip == commuting_trip ?
-							simrand_normal(range_commuting_tolerance, "karte_t::step_passengers_and_mail (commuting tolerance?)") + min_commuting_tolerance : 
-							/*trip == visiting_trip ? */
-							simrand_normal(range_visiting_tolerance, "karte_t::step_passengers_and_mail (visiting tolerance?)") + min_visiting_tolerance;
+					if (wtyp == warenbauer_t::passagiere) {
+						int commuting_ct = 260;
+						int visiting_ct = 156;
+						int overnight_ct = 2;
+						int total_ct = commuting_ct+visiting_ct+overnight_ct;
+						int random_number = simrand(total_ct, "karte_t::step_passengers_and_mail() (commuting / visiting / overnight trip?)");
+						if (random_number < commuting_ct) {
+							trip = commuting_trip;
+							tolerance = min_commuting_tolerance
+								+ simrand_normal(range_commuting_tolerance, "karte_t::step_passengers_and_mail (commuting tolerance?)";
+						} else if (random_number < commuting_ct + visiting_ct) {
+							trip = visiting_trip;
+							tolerance = min_visiting_tolerance
+								+ simrand_normal(range_visiting_tolerance, "karte_t::step_passengers_and_mail (visiting tolerance?)";
+						} else {
+							trip = overnight_trip;
+							tolerance = min_overnight_tolerance
+								+ simrand_normal(range_overnight_tolerance, "karte_t::step_passengers_and_mail (overnight tolerance?)";
+						}
+					} else if (wtyp == warenbauer_t::post) {
+						trip = mail_trip;
+						tolerance = 65535;
+					}
 				}
 				else
 				{

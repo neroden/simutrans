@@ -36,9 +36,6 @@ private:
 	// stores climate related settings
 	uint8 climate_data;
 
-	/* only one station per ground xy tile */
-	halthandle_t this_halt;
-
 	union DATA {
 		grund_t ** some;    // valid if capacity > 1
 		grund_t * one;      // valid if capacity == 1

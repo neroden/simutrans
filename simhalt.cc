@@ -2964,7 +2964,7 @@ bool haltestelle_t::add_grund(grund_t *gr)
 			break;
 		}
 	}
-	if (  !grund_is_where_it_should_be || gr->get_halt() != self || !gr->is_halt()  );
+	if (  !grund_is_where_it_should_be || gr->get_halt() != self || !gr->is_halt()  ) {
 		dbg->error( "haltestelle_t::add_grund()", "no ground added to (%s)", gr->get_pos().get_str() );
 	}
 	init_pos = tiles.front().grund->get_pos().get_2d();

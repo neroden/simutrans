@@ -170,47 +170,6 @@ halthandle_t haltestelle_t::get_halt(const karte_t *welt, const koord3d pos, con
 }
 
 
-/* we allow only for a single stop per planquadrat
- * this will only return something if this stop belongs to same player or is public, or is a dock (when on water)
- */
-halthandle_t haltestelle_t::get_halt_2d(const karte_t *welt, const koord pos, const spieler_t *sp )
-{
-	if(  const planquadrat_t *plan = welt->lookup(pos)  ) {
-		if(plan->get_halt().is_bound()  &&  spieler_t::check_owner(sp,plan->get_halt()->get_besitzer())  ) {
-			return plan->get_halt();
-		}
-		for(  uint8 i=0;  i < plan->get_boden_count();  i++  ) {
-			halthandle_t my_halt = plan->get_boden_bei(i)->get_halt();
-			if(  my_halt.is_bound()  &&  my_halt->check_access(sp)  ) {
-			// Stop at first halt found (always prefer ground level)
-			return my_halt;
-		}
-
-		// no halt? => we do the water check
-		if(plan->get_kartenboden()->ist_wasser()) {
-			// may catch bus stops close to water ...
-			const uint8 cnt = plan->get_haltlist_count();
-			// first check for own stop
-			for(  uint8 i=0;  i<cnt;  i++  ) {
-				halthandle_t halt = plan->get_haltlist()[i];
-				if(  halt->get_besitzer()==sp  &&  halt->get_station_type()&dock  ) {
-					return halt;
-				}
-			}
-			// then for public stop
-			for(  uint8 i=0;  i<cnt;  i++  ) {
-				halthandle_t halt = plan->get_haltlist()[i];
-				if(  halt->get_besitzer()==welt->get_spieler(1)  &&  halt->get_station_type()&dock  ) {
-					return halt;
-				}
-			}
-			// so: nothing found
-		}
-	}
-	return halthandle_t();
-}
-
-
 koord haltestelle_t::get_basis_pos() const
 {
 	return get_basis_pos3d().get_2d();

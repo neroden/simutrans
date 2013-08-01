@@ -3670,7 +3670,7 @@ DBG_MESSAGE("wkz_dockbau()","building dock from square (%d,%d) to (%d,%d)", pos.
 	bool neu = !halt.is_bound();
 
 	if(neu) {
-		if(  welt->lookup( pos )->get_halt().is_bound()  ) {
+		if( gr && gr->get_halt().is_bound()  ) {
 			return "Das Feld gehoert\neinem anderen Spieler\n";
 		}
 		// ok, really new stop on this tile then
@@ -3872,7 +3872,7 @@ DBG_MESSAGE("wkz_halt_aux()", "building %s on square %d,%d for waytype %x", besc
 	bool neu = !halt.is_bound();
 
 	if(neu) {
-		if(  welt->lookup( k )->get_halt().is_bound()  ) {
+		if(  bd && bd->get_halt().is_bound()  ) {
 			return "Das Feld gehoert\neinem anderen Spieler\n";
 		}
 		halt = haltestelle_t::create(welt, pos, sp);

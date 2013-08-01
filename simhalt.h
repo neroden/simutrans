@@ -150,7 +150,7 @@ public:
 	 */
 	static int erzeuge_fussgaenger(karte_t *welt, const koord3d pos, int anzahl);
 
-	/* we allow only for a single stop per planquadrat
+	/*
 	 * this will only return something if this stop belongs to same player or is public, or is a dock (when on water)
 	 */
 	static halthandle_t get_halt(const karte_t *welt, const koord3d pos, const spieler_t *sp );

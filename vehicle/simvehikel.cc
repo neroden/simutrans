@@ -1604,7 +1604,7 @@ DBG_MESSAGE("vehicle_t::rdwr_from_convoi()","bought at %i/%i.",(insta_zeit%12)+1
 	// koordinate of the last stop
 	if(file->get_version()>=99015) {
 		// This used to be 2d, now it's 3d.
-		if(file->get_experimental_version() < 12) {
+		if(file->get_version() < 112008) {
 			if(file->is_saving()) {
 				koord last_stop_pos_2d = last_stop_pos.get_2d();
 				last_stop_pos_2d.rdwr(file);

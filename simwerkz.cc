@@ -5716,7 +5716,6 @@ const char *wkz_make_stop_public_t::move( karte_t *welt, spieler_t *sp, uint16, 
 
 const char *wkz_make_stop_public_t::work( karte_t *welt, spieler_t *sp, koord3d p )
 {
-	const planquadrat_t *pl = welt->lookup(p.get_2d());
 	const grund_t *gr = welt->lookup(p);
 	if(  !gr  ||  !gr->get_halt().is_bound()  ||  gr->get_halt()->get_besitzer()==welt->get_spieler(1)  ) {
 		weg_t *w = NULL;
